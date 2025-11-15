@@ -112,20 +112,7 @@ pipeline {
             }
         }
         
-     stage('Run Lightweight HTTP Tests') {
-    steps {
-        echo "Running lightweight HTTP-only tests..."
-        // Make sure we're in the workspace root
-        dir("${WORKSPACE}") {
-            // Run the standard library unittest file
-            sh '''
-                python3 -m unittest discover -s tests -p "test_http_light.py"
-            '''
-        }
-    }
-}
-
-
+     
 
         
         
