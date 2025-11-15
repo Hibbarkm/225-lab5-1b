@@ -15,17 +15,39 @@ def get_db():
     return db
 
 def init_db():
+    """Initialize the database with a motorcycle parts table."""
     with app.app_context():
         db = get_db()
+
+        # Drop old contacts table if it exists (optional)
+        db.execute("DROP TABLE IF EXISTS contacts")
+
+        # Create the new parts table
         db.execute('''
-            CREATE TABLE IF NOT EXISTS contacts (
+            CREATE TABLE IF NOT EXISTS parts (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
-                phone TEXT NOT NULL
+                category TEXT,
+                quantity INTEGER DEFAULT 0,
+                price REAL DEFAULT 0.0,
+                description TEXT
             );
         ''')
+
+        # Optional: Insert some sample parts
+        sample_parts = [
+            ("Brake Pad", "Brakes", 50, 25.99, "High performance front brake pad"),
+            ("Oil Filter", "Engine", 100, 7.50, "OEM replacement oil filter"),
+            ("Tire", "Wheels", 20, 120.00, "Sport rear tire 180/55ZR17")
+        ]
+        db.executemany(
+            "INSERT INTO parts (name, category, quantity, price, description) VALUES (?, ?, ?, ?, ?)",
+            sample_parts
+        )
+
         db.commit()
         db.close()
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
