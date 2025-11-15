@@ -2,55 +2,48 @@
 body {
   padding-top: 2rem;
   font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
-  background-color: #121212;
-  color: #E0E0E0;
+  background-color: #1C1F26;   /* deep gray-blue background */
+  color: #E0E0E0;              /* soft white text */
 }
 
 .card {
   border-radius: 0.8rem;
-  border: 1px solid #1C1C1C;
-  background-color: #1C1C1C;
+  border: 1px solid #2F3642;   /* slightly lighter border */
+  background-color: #262B38;   /* card background slightly lighter than body */
+  color: #E0E0E0;
 }
 
 /* Buttons */
 .btn-primary {
-  background-color: #FF6F00 !important;
-  border-color: #FF6F00 !important;
-  color: #121212;
+  background-color: #3A86FF !important; /* bright, readable blue */
+  border-color: #3A86FF !important;
+  color: #FFFFFF;
 }
 .btn-primary:hover {
-  background-color: #e65b00 !important;
-  border-color: #e65b00 !important;
+  background-color: #336FCC !important;
+  border-color: #336FCC !important;
 }
 
 .btn-outline-secondary {
-  color: #FF6F00 !important;
-  border-color: #FF6F00 !important;
+  color: #3A86FF !important;
+  border-color: #3A86FF !important;
 }
 .btn-outline-secondary:hover {
-  background-color: #FF6F00 !important;
-  color: #121212 !important;
+  background-color: #3A86FF !important;
+  color: #FFFFFF !important;
 }
 
 /* Table Styling */
 .table thead th {
-  background: #1C1C1C;
-  border-bottom: 2px solid #FF6F00 !important;
+  background: #2F3642;
+  border-bottom: 2px solid #3A86FF !important;
   color: #E0E0E0;
 }
 .table-striped tbody tr:nth-of-type(odd) {
-  background-color: rgba(255, 111, 0, 0.05);
+  background-color: rgba(58, 134, 255, 0.08); /* subtle blue row stripes */
 }
 .table-striped tbody tr:nth-of-type(even) {
-  background-color: rgba(255, 111, 0, 0.02);
-}
-
-/* Dark Mode Adjustments */
-[data-bs-theme="dark"] .card {
-  border: 1px solid #333;
-}
-[data-bs-theme="dark"] .table-striped tbody tr:nth-of-type(odd) {
-  background-color: rgba(255, 111, 0, 0.15);
+  background-color: rgba(58, 134, 255, 0.03);
 }
 
 /* Branding Titles */
@@ -60,13 +53,13 @@ body {
   letter-spacing: 1px;
   font-size: 1.9rem;
   line-height: 1.1;
-  color: #FF6F00;
+  color: #3A86FF;  /* brand blue */
   text-transform: uppercase;
 }
 .miami-subtitle {
   font-family: 'Inter', sans-serif;
   font-size: 0.95rem;
-  color: #E0E0E0;
+  color: #B0B0B0;  /* lighter gray for subtitle */
 }
 h1, h2, h3, .h1, .h2, .h3 {
   font-family: 'Oswald', sans-serif;
@@ -76,24 +69,16 @@ h1, h2, h3, .h1, .h2, .h3 {
 
 /* Pagination */
 .page-link {
-  color: #FF6F00 !important;
-  border-color: #1C1C1C !important;
+  color: #3A86FF !important;
+  border-color: #2F3642 !important;
 }
 .page-link:hover {
-  background-color: rgba(255, 111, 0, 0.1) !important;
-  border-color: #FF6F00 !important;
-  color: #121212 !important;
+  background-color: rgba(58, 134, 255, 0.15) !important;
+  border-color: #3A86FF !important;
+  color: #FFFFFF !important;
 }
 .page-item.active .page-link {
-  background-color: #FF6F00 !important;
-  border-color: #FF6F00 !important;
-  color: #121212 !important;
-}
-[data-bs-theme="dark"] .page-link {
-  color: #FF6F00 !important;
-}
-[data-bs-theme="dark"] .page-item.active .page-link {
-  background-color: #FF6F00 !important;
-  border-color: #FF6F00 !important;
-  color: #121212 !important;
+  background-color: #3A86FF !important;
+  border-color: #3A86FF !important;
+  color: #FFFFFF !important;
 }
