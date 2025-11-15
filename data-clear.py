@@ -1,20 +1,21 @@
 import sqlite3
 
-# Database file path, ensure this matches the path used in your Flask application
+# Database file path (same as in your Flask app)
 DATABASE = '/nfs/demo.db'
 
 def connect_db():
     """Connect to the SQLite database."""
     return sqlite3.connect(DATABASE)
 
-def clear_test_contacts():
-    """Clear only the test contacts from the database."""
+def clear_test_parts():
+    """Clear only the test parts from the database."""
     db = connect_db()
-    # Assuming all test contacts follow a specific naming pattern
-    db.execute("DELETE FROM contacts WHERE name LIKE 'Test Name %'")
+    # Assuming all test parts follow a specific naming pattern
+    db.execute("DELETE FROM parts WHERE name LIKE 'Test Part %'")
     db.commit()
-    print('Test contacts have been deleted from the database.')
+    print('Test parts have been deleted from the database.')
     db.close()
 
 if __name__ == '__main__':
-    clear_test_contacts()
+    clear_test_parts()
+
