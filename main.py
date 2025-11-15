@@ -20,7 +20,7 @@ def init_db():
         db = get_db()
 
         # Drop old contacts table if it exists
-        db.execute("DROP TABLE IF EXISTS contacts")
+        db.execute("DROP TABLE IF EXISTS parts")
 
         # Create the new parts table
         db.execute('''
