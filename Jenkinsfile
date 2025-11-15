@@ -18,7 +18,18 @@ pipeline {
             }
         }
         
-       stage('Lint HTML') {
+stage('Lint Python') {
+    steps {
+        sh 'pip install flake8'
+        sh 'flake8 .'
+    }
+}
+
+        
+        
+        
+        
+        stage('Lint HTML') {
             steps {
                 sh 'npm install htmlhint --save-dev'
                 sh 'npx htmlhint *.html'
