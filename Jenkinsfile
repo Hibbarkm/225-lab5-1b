@@ -112,7 +112,20 @@ pipeline {
             }
         }
         
-       stage('Run Lightweight Tests') {
+       stage('Install Python Dependencies') {
+    steps {
+        // Upgrade pip and install required Python packages
+        sh 'python3 -m pip install --upgrade pip'
+        sh 'pip install Flask selenium'
+    }
+}
+
+        
+        
+        
+        
+        
+        stage('Run Lightweight Tests') {
     steps {
         echo 'Running lightweight Flask and Selenium tests...'
         sh 'python3 -m unittest discover -s tests -p "test_flask_light.py"'
