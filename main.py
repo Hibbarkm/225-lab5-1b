@@ -19,7 +19,7 @@ def init_db():
     with app.app_context():
         db = get_db()
 
-        # Drop old contacts table if it exists (optional)
+        # Drop old contacts table if it exists
         db.execute("DROP TABLE IF EXISTS contacts")
 
         # Create the new parts table
@@ -34,7 +34,7 @@ def init_db():
             );
         ''')
 
-        # Optional: Insert some sample parts
+        # Optional sample data
         sample_parts = [
             ("Brake Pad", "Brakes", 50, 25.99, "High performance front brake pad"),
             ("Oil Filter", "Engine", 100, 7.50, "OEM replacement oil filter"),
@@ -51,46 +51,69 @@ def init_db():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    # ---------------------------
+    # POST (Add, Update, Delete)
+    # ---------------------------
     if request.method == 'POST':
         action = request.form.get('action')
 
+        # DELETE PART
         if action == 'delete':
-            contact_id = request.form.get('contact_id')
-            if contact_id:
+            part_id = request.form.get('part_id')
+            if part_id:
                 db = get_db()
-                db.execute('DELETE FROM contacts WHERE id = ?', (contact_id,))
+                db.execute('DELETE FROM parts WHERE id = ?', (part_id,))
                 db.commit(); db.close()
-                flash('Contact deleted successfully.', 'success')
+                flash('Part deleted successfully.', 'success')
             else:
-                flash('Missing contact id.', 'danger')
+                flash('Missing part id.', 'danger')
             return redirect(url_for('index'))
 
+        # UPDATE PART
         if action == 'update':
-            contact_id = request.form.get('contact_id')
+            part_id = request.form.get('part_id')
             name = request.form.get('name')
-            phone = request.form.get('phone')
-            if contact_id and name and phone:
+            category = request.form.get('category')
+            quantity = request.form.get('quantity')
+            price = request.form.get('price')
+            description = request.form.get('description')
+
+            if part_id and name:
                 db = get_db()
-                db.execute('UPDATE contacts SET name=?, phone=? WHERE id=?', (name, phone, contact_id))
+                db.execute('''
+                    UPDATE parts
+                    SET name=?, category=?, quantity=?, price=?, description=?
+                    WHERE id=?
+                ''', (name, category, quantity, price, description, part_id))
                 db.commit(); db.close()
-                flash('Contact updated.', 'success')
+                flash('Part updated.', 'success')
             else:
-                flash('Missing fields for update.', 'danger')
+                flash('Missing required fields for update.', 'danger')
             return redirect(url_for('index'))
 
-        # default → add
+        # ADD NEW PART
         name = request.form.get('name')
-        phone = request.form.get('phone')
-        if name and phone:
+        category = request.form.get('category')
+        quantity = request.form.get('quantity')
+        price = request.form.get('price')
+        description = request.form.get('description')
+
+        if name:
             db = get_db()
-            db.execute('INSERT INTO contacts (name, phone) VALUES (?, ?)', (name, phone))
+            db.execute('''
+                INSERT INTO parts (name, category, quantity, price, description)
+                VALUES (?, ?, ?, ?, ?)
+            ''', (name, category, quantity, price, description))
             db.commit(); db.close()
-            flash('Contact added successfully.', 'success')
+            flash('Part added successfully.', 'success')
         else:
-            flash('Missing name or phone number.', 'danger')
+            flash('Name is required.', 'danger')
+
         return redirect(url_for('index'))
 
-    # GET: pagination
+    # ---------------------------
+    # GET (Pagination)
+    # ---------------------------
     try:
         page = max(int(request.args.get('page', 1)), 1)
     except ValueError:
@@ -99,12 +122,13 @@ def index():
         per_page = max(int(request.args.get('per', PER_PAGE_DEFAULT)), 1)
     except ValueError:
         per_page = PER_PAGE_DEFAULT
+
     offset = (page - 1) * per_page
 
     db = get_db()
-    total = db.execute('SELECT COUNT(*) FROM contacts').fetchone()[0]
-    contacts = db.execute(
-        'SELECT * FROM contacts ORDER BY id DESC LIMIT ? OFFSET ?',
+    total = db.execute('SELECT COUNT(*) FROM parts').fetchone()[0]
+    parts = db.execute(
+        'SELECT * FROM parts ORDER BY id DESC LIMIT ? OFFSET ?',
         (per_page, offset)
     ).fetchall()
     db.close()
@@ -117,7 +141,7 @@ def index():
 
     return render_template(
         'index.html',
-        contacts=contacts,
+        parts=parts,
         page=page, pages=pages, per_page=per_page,
         has_prev=has_prev, has_next=has_next, total=total,
         start_page=start_page, end_page=end_page
