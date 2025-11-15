@@ -77,7 +77,8 @@ pipeline {
                 import sqlite3
                 conn = sqlite3.connect('/nfs/demo.db')
                 cur = conn.cursor()
-                cur.execute('DELETE FROM contacts')
+                cur.execute('DELETE FROM parts')
+
                 conn.commit()
                 conn.close()
                 PY
