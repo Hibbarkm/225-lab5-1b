@@ -28,6 +28,19 @@ pipeline {
                 sh 'npx htmlhint *.html'
             }
         }
+
+stage('Lint CSS') {
+    steps {
+        // Install stylelint locally
+        sh 'npm install stylelint stylelint-config-standard --save-dev'
+        
+        // Run stylelint against all CSS files in your repo
+        sh 'npx stylelint "**/*.css"'
+    }
+}
+
+
+
         
         stage('Build & Push Docker Image') {
           steps {
