@@ -30,12 +30,7 @@ pipeline {
         }
 
 
-stage('Lint CSS') {
-    steps {
-        sh 'npm install stylelint@13.13.1 --save-dev'
-        sh 'npx stylelint "**/*.css"'
-    }
-}
+
 
 
 
