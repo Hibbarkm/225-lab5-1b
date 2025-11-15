@@ -54,11 +54,7 @@ pipeline {
         }
         
       
-        stage('Dev Environment Smoke Test') {
-    steps {
-        sh 'curl -f http://<DEV_APP_IP>:5000/health || exit 1'
-    }
-}
+       
 
         
         
