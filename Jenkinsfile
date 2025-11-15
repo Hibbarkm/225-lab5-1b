@@ -29,12 +29,10 @@ pipeline {
             }
         }
 
+
 stage('Lint CSS') {
     steps {
-        // Install stylelint locally
-        sh 'npm install stylelint stylelint-config-standard --save-dev'
-        
-        // Run stylelint against all CSS files in your repo
+        sh 'npm install stylelint@13.13.1 --save-dev'
         sh 'npx stylelint "**/*.css"'
     }
 }
