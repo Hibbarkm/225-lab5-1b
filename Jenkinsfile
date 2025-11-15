@@ -111,6 +111,18 @@ pipeline {
             }
         }
         
+       stage('Run Lightweight Tests') {
+    steps {
+        echo 'Running lightweight Flask and Selenium tests...'
+        sh 'python3 -m unittest discover -s tests -p "test_flask_light.py"'
+        sh 'python3 -m unittest discover -s tests -p "test_ui_light.py"'
+    }
+}
+
+        
+        
+        
+        
         stage('Remove Test Data') {
             steps {
                 script {
