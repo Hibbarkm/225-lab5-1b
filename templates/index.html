@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Contacts</title>
+    <title>Motorcycle Parts Inventory</title>
 
     <!-- Fonts (branding) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,7 +18,7 @@
 
       <header class="mb-4 py-3 border-bottom d-flex align-items-center">
         <div>
-          <div class="miami-title">Lab 4.2</div>
+          <div class="miami-title">Motorcycle Parts Inventory</div>
           <div class="miami-subtitle">by Keith Hibbard</div>
         </div>
       </header>
@@ -38,23 +38,40 @@
         {% endif %}
       {% endwith %}
 
-      <!-- Add form -->
+      <!-- Add Part Form -->
       <div class="card shadow-sm form-card mb-4">
         <div class="card-body">
-          <h2 class="h5 mb-3">Add Contact</h2>
+          <h2 class="h5 mb-3">Add Motorcycle Part</h2>
           <form method="POST" action="{{ url_for('index') }}" class="row g-3">
             <input type="hidden" name="action" value="add">
+
             <div class="col-md-6">
-              <label for="name" class="form-label">Name</label>
+              <label for="name" class="form-label">Part Name</label>
               <input class="form-control" id="name" name="name" required>
             </div>
+
             <div class="col-md-6">
-              <label for="phone" class="form-label">Phone</label>
-              <input class="form-control" id="phone" name="phone" required
-                     pattern="^[0-9()+\\-\\s]+$" title="Digits, spaces, (), - and + only">
+              <label for="category" class="form-label">Category</label>
+              <input class="form-control" id="category" name="category" required>
             </div>
+
+            <div class="col-md-4">
+              <label for="quantity" class="form-label">Quantity</label>
+              <input class="form-control" type="number" id="quantity" name="quantity" min="0" required>
+            </div>
+
+            <div class="col-md-4">
+              <label for="price" class="form-label">Price ($)</label>
+              <input class="form-control" type="number" step="0.01" id="price" name="price" required>
+            </div>
+
+            <div class="col-md-4">
+              <label for="description" class="form-label">Description</label>
+              <input class="form-control" id="description" name="description">
+            </div>
+
             <div class="col-12">
-              <button class="btn btn-primary" type="submit">Add Contact</button>
+              <button class="btn btn-primary" type="submit">Add Part</button>
             </div>
           </form>
         </div>
@@ -62,42 +79,55 @@
 
       <!-- Search + heading -->
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <h2 class="h5 m-0">All Contacts</h2>
+        <h2 class="h5 m-0">All Parts</h2>
         <input id="filter" class="form-control" style="max-width: 280px;" placeholder="Search…">
       </div>
 
-      <!-- Contacts table -->
+      <!-- Parts Table -->
       <div class="card shadow-sm mb-3">
         <div class="table-responsive">
           <table class="table align-middle mb-0 table-striped">
             <thead>
               <tr>
-                <th style="width: 8ch">ID</th>
-                <th style="width: 50%">Name</th>
-                <th style="width: 30%">Phone</th>
-                <th class="text-end" style="width: 12%">Actions</th>
+                <th>ID</th>
+                <th>Part Name</th>
+                <th>Category</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th class="text-end">Actions</th>
               </tr>
             </thead>
             <tbody id="rows">
-              {% for c in contacts %}
+              {% for p in parts %}
               <tr>
-                <td class="id text-secondary">{{ c['id'] }}</td>
-                <td class="name">{{ c['name'] }}</td>
-                <td class="phone text-nowrap">{{ c['phone'] }}</td>
+                <td class="id text-secondary">{{ p['id'] }}</td>
+                <td class="name">{{ p['name'] }}</td>
+                <td class="category">{{ p['category'] }}</td>
+                <td class="quantity">{{ p['quantity'] }}</td>
+                <td class="price">${{ "%.2f"|format(p['price']) }}</td>
+                <td class="description">{{ p['description'] }}</td>
+
                 <td class="text-end">
                   <div class="d-inline-flex gap-2">
+
+                    <!-- Edit Button -->
                     <button
                       type="button"
                       class="btn btn-sm btn-outline-secondary"
                       data-bs-toggle="modal"
                       data-bs-target="#editModal"
-                      data-id="{{ c['id'] }}"
-                      data-name="{{ c['name'] }}"
-                      data-phone="{{ c['phone'] }}"
+                      data-id="{{ p['id'] }}"
+                      data-name="{{ p['name'] }}"
+                      data-category="{{ p['category'] }}"
+                      data-quantity="{{ p['quantity'] }}"
+                      data-price="{{ p['price'] }}"
+                      data-description="{{ p['description'] }}"
                     >Edit</button>
 
-                    <form method="POST" action="{{ url_for('index') }}" onsubmit="return confirm('Delete this contact?')">
-                      <input type="hidden" name="contact_id" value="{{ c['id'] }}">
+                    <!-- Delete Form -->
+                    <form method="POST" action="{{ url_for('index') }}" onsubmit="return confirm('Delete this part?')">
+                      <input type="hidden" name="part_id" value="{{ p['id'] }}">
                       <input type="hidden" name="action" value="delete">
                       <button class="btn btn-sm btn-outline-danger">Delete</button>
                     </form>
@@ -105,18 +135,19 @@
                 </td>
               </tr>
               {% endfor %}
-              {% if not contacts %}
-              <tr><td colspan="4" class="text-center text-secondary py-4">No contacts found.</td></tr>
+
+              {% if not parts %}
+              <tr><td colspan="7" class="text-center text-secondary py-4">No parts found.</td></tr>
               {% endif %}
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Pagination -->
-      <nav aria-label="Contacts pagination" class="d-flex justify-content-between align-items-center">
+      <!-- Pagination (unchanged logic, new wording) -->
+      <nav aria-label="Parts pagination" class="d-flex justify-content-between align-items-center">
         <div class="text-secondary small">
-          Page <strong>{{ page }}</strong> of <strong>{{ pages }}</strong> · {{ total }} total
+          Page <strong>{{ page }}</strong> of <strong>{{ pages }}</strong> · {{ total }} total parts
         </div>
         <ul class="pagination mb-0">
           <li class="page-item {% if not has_prev %}disabled{% endif %}">
@@ -133,9 +164,8 @@
         </ul>
       </nav>
 
-      <footer class="py-4 text-center text-secondary small">
-        &copy; {{ 2025 }} Keith Hibbard
-      </footer>
+      <footer class="py-4 text-center text-secondary small">&copy; {{ 2025 }} Keith Hibbard</footer>
+
     </div>
 
     <!-- Edit Modal -->
@@ -143,22 +173,40 @@
       <div class="modal-dialog">
         <form method="POST" action="{{ url_for('index') }}" class="modal-content">
           <input type="hidden" name="action" value="update">
-          <input type="hidden" name="contact_id" id="edit-id">
+          <input type="hidden" name="part_id" id="edit-id">
+
           <div class="modal-header">
-            <h5 class="modal-title">Edit Contact</h5>
+            <h5 class="modal-title">Edit Part</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
+
           <div class="modal-body row g-3">
-            <div class="col-12">
-              <label class="form-label">Name</label>
+            <div class="col-md-6">
+              <label class="form-label">Part Name</label>
               <input class="form-control" name="name" id="edit-name" required>
             </div>
-            <div class="col-12">
-              <label class="form-label">Phone</label>
-              <input class="form-control" name="phone" id="edit-phone" required
-                     pattern="^[0-9()+\\-\\s]+$" title="Digits, spaces, (), - and + only">
+
+            <div class="col-md-6">
+              <label class="form-label">Category</label>
+              <input class="form-control" name="category" id="edit-category" required>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Quantity</label>
+              <input class="form-control" type="number" name="quantity" id="edit-quantity" required>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Price ($)</label>
+              <input class="form-control" type="number" step="0.01" name="price" id="edit-price" required>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Description</label>
+              <input class="form-control" name="description" id="edit-description">
             </div>
           </div>
+
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
             <button class="btn btn-primary" type="submit">Save changes</button>
