@@ -112,13 +112,24 @@ pipeline {
             }
         }
         
-       stage('Install Python Dependencies') {
+     stage('Install Python Dependencies') {
     steps {
-        // Upgrade pip and install required Python packages
-        sh 'python3 -m pip install --upgrade pip'
-        sh 'pip install Flask selenium'
+        sh '''
+            # Install pip if missing
+            if ! command -v pip3 >/dev/null 2>&1; then
+                echo "pip3 not found. Installing..."
+                apt-get update && apt-get install -y python3-pip
+            fi
+
+            # Upgrade pip
+            python3 -m pip install --upgrade pip
+
+            # Install required Python packages
+            python3 -m pip install flask selenium
+        '''
     }
 }
+
 
         
         
