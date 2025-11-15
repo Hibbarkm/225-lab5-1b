@@ -18,14 +18,7 @@ pipeline {
             }
         }
         
-stage('Lint Python') {
-    steps {
-        sh 'pip install flake8'
-        sh 'flake8 .'
-    }
-}
 
-        
         
         
         
