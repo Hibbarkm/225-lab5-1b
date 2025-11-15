@@ -1,10 +1,9 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
 import unittest
 
-class TestContacts(unittest.TestCase):
+class TestParts(unittest.TestCase):
     def setUp(self):
         # Setup Firefox options
         firefox_options = Options()
@@ -13,15 +12,15 @@ class TestContacts(unittest.TestCase):
         firefox_options.add_argument("--disable-dev-shm-usage")
         self.driver = webdriver.Firefox(options=firefox_options)
 
-    def test_contacts(self):
+    def test_parts(self):
         driver = self.driver
-        driver.get("http://10.48.229.148")  # Replace with your target website (your 'dev' site/clusterIP)
+        driver.get("http://10.48.229.148")  # Replace with your cluster/dev site
         
-        # Check for the presence of all 10 test contacts
+        # Check for the presence of all 10 test parts
         for i in range(10):
-            test_name = f'Test Name {i}'
-            assert test_name in driver.page_source, f"Test contact {test_name} not found in page source"
-        print("Test completed successfully. All 10 test contacts were verified.")
+            test_name = f'Test Part {i}'
+            assert test_name in driver.page_source, f"Test part {test_name} not found in page source"
+        print("Test completed successfully. All 10 test parts were verified.")
 
     def tearDown(self):
         self.driver.quit()
