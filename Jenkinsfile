@@ -53,6 +53,16 @@ pipeline {
             }
         }
         
+      
+        stage('Dev Environment Smoke Test') {
+    steps {
+        sh 'curl -f http://<DEV_APP_IP>:5000/health || exit 1'
+    }
+}
+
+        
+        
+        
         stage ("Run Security Checks") {
             steps {
                 //                                                                 ###change the IP address in this section to your cluster IP address!!!!####
