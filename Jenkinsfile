@@ -32,16 +32,17 @@ pipeline {
 
 stage('Static Tests') {
     steps {
-        // Python static syntax test
+        // 1️⃣ Python static syntax test
         sh 'python3 -m py_compile $(find . -name "*.py")'
 
-        // YAML syntax check for Kubernetes manifests
+        // 2️⃣ YAML syntax check for Kubernetes manifests (supports multiple documents)
         sh '''
         python3 - <<EOF
 import yaml, glob, sys
 for f in glob.glob("*.yaml"):
     try:
-        yaml.safe_load(open(f))
+        with open(f) as file:
+            list(yaml.safe_load_all(file))  # safe_load_all handles multiple YAML documents
     except Exception as e:
         print(f"YAML ERROR in {f}: {e}")
         sys.exit(1)
@@ -49,6 +50,7 @@ EOF
         '''
     }
 }
+
 
 
 
