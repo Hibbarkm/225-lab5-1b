@@ -34,8 +34,22 @@ stage('Static Tests') {
     steps {
         // Python static syntax test
         sh 'python3 -m py_compile $(find . -name "*.py")'
+
+        // YAML syntax check for Kubernetes manifests
+        sh '''
+        python3 - <<EOF
+import yaml, glob, sys
+for f in glob.glob("*.yaml"):
+    try:
+        yaml.safe_load(open(f))
+    except Exception as e:
+        print(f"YAML ERROR in {f}: {e}")
+        sys.exit(1)
+EOF
+        '''
     }
 }
+
 
 
 
