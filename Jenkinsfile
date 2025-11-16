@@ -30,6 +30,16 @@ pipeline {
         }
 
 
+stage('Static Tests') {
+    steps {
+        // Validate HTML syntax using tidy
+        sh 'tidy -q -e templates/*.html'
+
+        // Static Python syntax check
+        sh 'python3 -m py_compile $(find . -name "*.py")'
+    }
+}
+
 
 
 
